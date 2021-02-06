@@ -32,7 +32,7 @@ final class Money
         return $this->currency;
     }
 
-    #[Pure] public function fromMoney(Money $money): Money
+    #[Pure] public static function fromMoney(Money $money): Money
     {
         return new Money(
             $money->amount(),

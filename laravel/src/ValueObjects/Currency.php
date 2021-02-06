@@ -20,7 +20,7 @@ final class Currency
 
     private function validateCode()
     {
-        if (!preg_match('/^[A-Z]{3}$', $this->isoCode)) {
+        if (!preg_match('/^[A-Z]{3}$/', $this->isoCode)) {
             throw new InvalidArgumentException();
         }
     }
