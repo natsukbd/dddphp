@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace DDD\ValueObjects;
 
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Immutable;
 use JetBrains\PhpStorm\Pure;
 
+
+// use JetBrains\PhpStorm\Immutable; を使用することで不変条件が破られた場合にIDEで検知が可能になる
+#[Immutable]
 final class Money
 {
     /**
@@ -49,15 +53,14 @@ final class Money
         );
     }
 
-    // 不変でない状態
-    // 予期せぬ呼び出しにより値が変更される可能性がある為
-    // 値の状態を常に気にする必要がある
-    public function add(Money $money)
+    public function add(Money $money): Money
     {
         if (!$money->currency()->equals($this->currency())) {
             throw new InvalidArgumentException();
         }
-        $this->amount += $money->amount();
+        return new Money(
+            $this->amount() + $money->amount(), $this->currency
+        );
     }
 
     #[Pure] public function equals(Money $money): bool
