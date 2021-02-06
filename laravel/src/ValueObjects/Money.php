@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DDD\ValueObjects;
 
+use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 
 final class Money
@@ -46,6 +47,17 @@ final class Money
             $this->amount() + $amount,
             $this->currency(),
         );
+    }
+
+    // 不変でない状態
+    // 予期せぬ呼び出しにより値が変更される可能性がある為
+    // 値の状態を常に気にする必要がある
+    public function add(Money $money)
+    {
+        if (!$money->currency()->equals($this->currency())) {
+            throw new InvalidArgumentException();
+        }
+        $this->amount += $money->amount();
     }
 
     #[Pure] public function equals(Money $money): bool
