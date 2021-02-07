@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DDD\ValueObjects;
+namespace DDD\ValueObjects\Domain\Model;
 
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Immutable;

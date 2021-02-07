@@ -1,9 +1,11 @@
 <?php
 
-namespace ValueObjects;
+declare(strict_types=1);
 
-use DDD\ValueObjects\Currency;
-use DDD\ValueObjects\Money;
+namespace Tests\DDD\Domain\Model;
+
+use DDD\ValueObjects\Domain\Model\Currency;
+use DDD\ValueObjects\Domain\Model\Money;
 use PHPUnit\Framework\TestCase;
 
 class MoneyTest extends TestCase
