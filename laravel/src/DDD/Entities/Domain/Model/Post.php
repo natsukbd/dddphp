@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace DDD\Entities\Domain\Model;
 
-use DateTimeImmutable;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
+use Carbon\CarbonImmutable;
 
 final class Post
 {
+    const NEW_TIME_INTERVAL_DAYS = 15;
+
     private Status $status;
 
-    private DateTimeImmutable $createdAt;
+    private CarbonImmutable $createdAt;
 
-    private ?DateTimeImmutable $publishedAt;
+    private ?CarbonImmutable $publishedAt;
 
     /**
      * Post constructor.
@@ -26,7 +28,7 @@ final class Post
         $this->validateContent($content);
         $this->validateTitle($this->title);
         $this->unpublish();
-        $this->createdAt(new DateTimeImmutable());
+        $this->createdAt(CarbonImmutable::today());
     }
 
     private function validateContent(string $content): void
@@ -48,14 +50,26 @@ final class Post
         $this->status = $status;
     }
 
-    private function createdAt(DateTimeImmutable $date)
+    public function isNew(): bool
+    {
+        return ($this->today())
+                ->diff($this->createdAt)
+                ->days <= self::NEW_TIME_INTERVAL_DAYS;
+    }
+
+    private function today(): CarbonImmutable
+    {
+        return CarbonImmutable::today();
+    }
+
+    private function createdAt(CarbonImmutable $date)
     {
         // 日付検証省略
 
         $this->createdAt = $date;
     }
 
-    private function publishedAt(?DateTimeImmutable $date)
+    private function publishedAt(?CarbonImmutable $date)
     {
         // 日付検証省略
         $this->publishedAt = $date;
@@ -64,7 +78,7 @@ final class Post
     public function publish()
     {
         $this->setStatus(Status::published());
-        $this->publishedAt(new DateTimeImmutable());
+        $this->publishedAt(new CarbonImmutable());
     }
 
     public function unPublish(): void
@@ -78,7 +92,7 @@ final class Post
         return $this->status->equalTo(Status::published());
     }
 
-    public function publicationDate(): ?DateTimeImmutable
+    public function publicationDate(): ?CarbonImmutable
     {
         return $this->publishedAt;
     }
