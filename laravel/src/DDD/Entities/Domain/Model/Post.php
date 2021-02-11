@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DDD\Entities\Domain\Model;
 
+use DDD\Entities\Domain\Event\DomainEventPublisher;
 use InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Carbon\CarbonImmutable;
@@ -77,14 +78,29 @@ final class Post
 
     public function publish()
     {
-        $this->setStatus(Status::published());
+        $this->setStatus(
+            Status::published()
+        );
+
         $this->publishedAt(new CarbonImmutable());
+
+        DomainEventPublisher::instance()->publish(
+            new PostPublished(
+                $this->id
+            )
+        );
     }
 
     public function unPublish(): void
     {
         $this->setStatus(Status::draft());
         $this->publishedAt(null);
+
+        DomainEventPublisher::instance()->publish(
+            new PostUnpublished(
+                $this->id
+            )
+        );
     }
 
     #[Pure] public function isPublished(): bool
