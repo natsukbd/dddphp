@@ -25,4 +25,8 @@ final class User
     {
         return $this->password;
     }
+
+    public function signIn(string $userName, string $password)
+    {
+    }
 }
