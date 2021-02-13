@@ -9,4 +9,6 @@ interface UserRepository
     public function userOfEmail(string $email): User;
 
     public function add(User $user): void;
+
+    public function byUserName(string $username): User;
 }
