@@ -4,27 +4,29 @@ declare(strict_types=1);
 
 namespace DDD\DomainEvents\Domain\Model\User;
 
-use Carbon\CarbonImmutable;
+use DateTimeImmutable;
 use DDD\DomainEvents\Domain\DomainEvent;
 use JetBrains\PhpStorm\Immutable;
-use JetBrains\PhpStorm\Pure;
 
 #[Immutable]
 final class UserRegistered implements DomainEvent
 {
     /**
-     * @var CarbonImmutable
+     * @var DateTimeImmutable
      */
-    private CarbonImmutable $occurredOn;
+    private DateTimeImmutable $occurredOn;
 
     /**
      * UserRegistered constructor.
      * @param UserId $userId
+     * @param string $userEmail
      */
-    #[Pure] public function __construct(private UserId $userId) // Entity を識別するために ID をもつ
-    {
+    public function __construct(
+        private UserId $userId,
+        private string $userEmail
+    ) {
         // 発生日時をもつ
-        $this->occurredOn = new CarbonImmutable();
+        $this->occurredOn = new DateTimeImmutable();
     }
 
     public function userId(): UserId
@@ -32,7 +34,12 @@ final class UserRegistered implements DomainEvent
         return $this->userId;
     }
 
-    public function occurredOn(): CarbonImmutable
+    public function userEmail(): string
+    {
+        return $this->userEmail;
+    }
+
+    public function occurredOn(): DateTimeImmutable
     {
         return $this->occurredOn;
     }
